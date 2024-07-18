@@ -2,11 +2,19 @@ use sila_transpiler_infrastructure::{
     transpile_javascript, transpile_python, transpile_ruby, Block, Expr, Instruction, Operator,
     Type,
 };
-use std::io::{self, Write};
+use std::{
+    fs::File,
+    io::{self, Write},
+};
 
 fn main() {
-    let program = ask_program();
-    println!("ほら、プログラムが出来たわよ！\n{}", ask_lang()(program));
+    let program = ask_lang()(ask_program());
+    println!("ほら、プログラムが出来たわよ！\nで、どのファイルに出力すれば良いのよ？");
+    File::create(input(">>> "))
+        .expect("ごめん、ファイルを開くのミスっちゃった")
+        .write_all(program.as_bytes())
+        .expect("ごめん、ファイルの書き込みミスっちゃった");
+    println!("あんたとプログラミングするの、少し楽しいのかもしれないわ...")
 }
 
 /// Get standard input
@@ -36,7 +44,7 @@ fn ask_lang() -> Box<dyn Fn(Block) -> String> {
 
 fn ask_instruction(prompt: &str) -> Instruction {
     println!("{prompt}に何の命令を追加したいのよ？");
-    println!("1: 標準出力\n2: 変数宣言\n3: 変数定義\n4: 条件分岐\n5: 繰り返し\n6: エラー処理");
+    println!("1: 標準出力\n2: 変数宣言\n3: 変数定義\n4: 条件分岐\n5: 繰り返し\n6: エラー処理\n7: 関数定義\n8: 値を返す");
     let answer = input(">>> ");
     if answer == "1" {
         Instruction::Print(ask_expr("引数"))
@@ -59,7 +67,7 @@ fn ask_instruction(prompt: &str) -> Instruction {
     } else if answer == "4" {
         Instruction::If(ask_expr("条件"), ask_block("trueの場合のコード"), {
             println!("Elseのコードは付けるの？");
-            println!("1: はい\n2: いいえ(デフォルトは2よ)");
+            println!("1: はい\n2: いいえ\n(デフォルトは2よ)");
             let answer = input(">>> ");
             if answer == "1" {
                 Some(ask_block("falseの場合のコード"))
@@ -74,6 +82,35 @@ fn ask_instruction(prompt: &str) -> Instruction {
             ask_block("エラーが起きそうなコード"),
             ask_block("エラー発生時に実行するコード"),
         )
+    } else if answer == "7" {
+        Instruction::Function(
+            {
+                println!("関数名は何にするのよ？");
+                input(">>> ")
+            },
+            {
+                let mut args = vec![];
+                if input("これって引数は取るの？\n1: はい\n2: いいえ\n(デフォルトは2よ)\n>>> ")
+                    == "1"
+                {
+                    loop {
+                        args.push(input("引数名を入力してよね\n>>> "));
+                        if input(
+                            "引数はこれだけよね？\n1: はい\n2: いいえ\n(デフォルトは2よ)\n>>> ",
+                        ) == "1"
+                        {
+                            break;
+                        }
+                    }
+                } else {
+                    println!("わかったわ、ただのサブルーチン的な関数なのね")
+                }
+                args
+            },
+            ask_block("関数の処理するコード"),
+        )
+    } else if answer == "8" {
+        Instruction::Return(Some(ask_expr("返す値")))
     } else {
         println!("まじめに入力しなさいよね！");
         ask_instruction(prompt)
@@ -81,7 +118,7 @@ fn ask_instruction(prompt: &str) -> Instruction {
 }
 
 fn ask_program() -> Block {
-    println!("プログラミングを始めるわよ！");
+    println!("さあ、プログラミングを始めるわよ！");
     let mut block: Block = vec![];
     loop {
         block.push(ask_instruction("プログラム"));
@@ -89,7 +126,7 @@ fn ask_program() -> Block {
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
-            println!("わかったわ。お疲れ様。\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
+            println!("わかったわ、お疲れ様♡\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
             break;
         }
     }
@@ -97,7 +134,7 @@ fn ask_program() -> Block {
 }
 
 fn ask_block(prompt: &str) -> Block {
-    println!("{prompt}を書いていくわよ！");
+    println!("さあ、{prompt}を書いていくわよ！");
     let mut block: Block = vec![];
     loop {
         block.push(ask_instruction(prompt));
@@ -105,7 +142,7 @@ fn ask_block(prompt: &str) -> Block {
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
-            println!("わかったわ、お疲れ様。\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
+            println!("わかったわ、お疲れ様♡\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
             break;
         }
     }
