@@ -1,0 +1,7 @@
+[package]
+name = "tsundere-coding"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sila-transpiler-infrastructure = "0.3.2"
