@@ -10,12 +10,12 @@ use std::{
 fn main() {
     let program = ask_program();
     let program = ask_lang()(program);
-    println!("ほら、プログラムが出来たわよ！\nで、どのファイルに出力すれば良いのよ？");
+    println!("プログラムが出来たわよ！\nで、どのファイルに書き込めば良いのよ？");
     File::create(input(">>> "))
         .expect("ごめん、ファイルを開くのミスっちゃった")
         .write_all(program.as_bytes())
         .expect("ごめん、ファイルの書き込みミスっちゃった");
-    println!("あんたとプログラミングするの、少し楽しいのかもしれないわ...")
+    println!("書き込んだわ、これで実行できるわね！\n...あんたとプログラミングするの、少しは楽しいのかもしれない♡")
 }
 
 /// Get standard input
