@@ -13,39 +13,6 @@ This project is a environment of interactive programming with tsundere prompt
 6: エラー処理
 7: 関数定義
 8: 値を返す
->>> 1
-引数の式ぐらい自分で入力しなさいよね！
->>> 2
-まだプログラミングを続けるわよね？
-1: もちろん
-2: もうおしまい
-(デフォルトは1よ)
->>> 2
-わかったわ、お疲れ様
-べっ、別にあんたなんかを労って言ってるわけじゃないんだからね！
-何言語のプログラムを出力したいのよ？
-1: JavaScript
-2: Ruby
-3: Python
->>> 3
-プログラムが出来たわよ！
-で、どのファイルに書き込めば良いのよ？
->>> 2
-書き込んだわ、これで実行できるわね！
-...あんたとプログラミングするの、少しは楽しいのかもしれない
-kajizukataichi@MacBook-Pro tsundere-coding % cargo run
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.16s
-     Running `target/debug/tsundere-coding`
-さあ、プログラミングを始めるわよ！
-プログラムに何の命令を追加したいのよ？
-1: 標準出力
-2: 変数宣言
-3: 変数定義
-4: 条件分岐
-5: 繰り返し
-6: エラー処理
-7: 関数定義
-8: 値を返す
 >>> 7
 関数名は何にするのよ？
 >>> x2
@@ -116,6 +83,7 @@ kajizukataichi@MacBook-Pro tsundere-coding % cargo run
 書き込んだわ、これで実行できるわね！
 ...あんたとプログラミングするの、少しは楽しいのかもしれない
 ```
+
 ### program.py
 ```python
 # Sila transpiled this code
