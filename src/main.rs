@@ -36,11 +36,27 @@ fn ask_lang() -> Box<dyn Fn(Block) -> String> {
 
 fn ask_instruction(prompt: &str) -> Instruction {
     println!("{prompt}に何の命令を追加したいのよ？");
-    println!("1: 標準出力\n2: 条件分岐");
+    println!("1: 標準出力\n2: 変数宣言\n3: 変数定義\n4: 条件分岐\n5: 繰り返し\n6: エラー処理");
     let answer = input(">>> ");
     if answer == "1" {
         Instruction::Print(ask_expr("引数"))
     } else if answer == "2" {
+        Instruction::Let(
+            {
+                println!("変数名は何にするのよ？");
+                input(">>> ")
+            },
+            ask_expr("変数の値"),
+        )
+    } else if answer == "3" {
+        Instruction::Let(
+            {
+                println!("何の変数の値を定義するのよ？");
+                input(">>> ")
+            },
+            ask_expr("変数の値"),
+        )
+    } else if answer == "4" {
         Instruction::If(ask_expr("条件"), ask_block("trueの場合のコード"), {
             println!("Elseのコードは付けるの？");
             println!("1: はい\n2: いいえ(デフォルトは2よ)");
@@ -51,6 +67,13 @@ fn ask_instruction(prompt: &str) -> Instruction {
                 None
             }
         })
+    } else if answer == "5" {
+        Instruction::While(ask_expr("継続する条件"), ask_block("繰り返すコード"))
+    } else if answer == "6" {
+        Instruction::TryError(
+            ask_block("エラーが起きそうなコード"),
+            ask_block("エラー発生時に実行するコード"),
+        )
     } else {
         println!("まじめに入力しなさいよね！");
         ask_instruction(prompt)
@@ -58,6 +81,7 @@ fn ask_instruction(prompt: &str) -> Instruction {
 }
 
 fn ask_program() -> Block {
+    println!("プログラミングを始めるわよ！");
     let mut block: Block = vec![];
     loop {
         block.push(ask_instruction("プログラム"));
@@ -65,7 +89,7 @@ fn ask_program() -> Block {
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
-            println!("え、もうやめるの？わかったわ。お疲れ様");
+            println!("え、もうやめるの？わかったわ。お疲れ様。\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
             break;
         }
     }
@@ -73,6 +97,7 @@ fn ask_program() -> Block {
 }
 
 fn ask_block(prompt: &str) -> Block {
+    println!("{prompt}のコードを書いていくわよ！");
     let mut block: Block = vec![];
     loop {
         block.push(ask_instruction(prompt));
@@ -80,7 +105,7 @@ fn ask_block(prompt: &str) -> Block {
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
-            println!("え、もうやめるの？わかったわ。お疲れ様");
+            println!("え、もうやめるの？わかったわ、お疲れ様。\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
             break;
         }
     }
@@ -122,6 +147,8 @@ fn parse_expr(source: String) -> Expr {
             expr.push(Expr::Operator(Operator::Greater))
         } else if token == "<" {
             expr.push(Expr::Operator(Operator::Less))
+        } else {
+            expr.push(Expr::Literal(Type::Symbol(token)))
         }
     }
     Expr::Expr(expr)
