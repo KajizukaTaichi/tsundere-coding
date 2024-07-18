@@ -5,7 +5,7 @@ use sila_transpiler_infrastructure::{
 use std::io::{self, Write};
 
 fn main() {
-    let program = ask_block();
+    let program = ask_program();
     println!("ほら、プログラムが出来たわよ！\n{}", ask_lang()(program));
 }
 
@@ -34,22 +34,33 @@ fn ask_lang() -> Box<dyn Fn(Block) -> String> {
     }
 }
 
-fn ask_instruction() -> Instruction {
-    println!("何の命令を追加したいのよ？");
-    println!("1: 標準出力");
+fn ask_instruction(prompt: &str) -> Instruction {
+    println!("{prompt}に何の命令を追加したいのよ？");
+    println!("1: 標準出力\n2: 条件分岐");
     let answer = input(">>> ");
     if answer == "1" {
-        Instruction::Print(ask_expr())
+        Instruction::Print(ask_expr("引数"))
+    } else if answer == "2" {
+        Instruction::If(ask_expr("条件"), ask_block("trueの場合のコード"), {
+            println!("Elseのコードは付けるの？");
+            println!("1: はい\n2: いいえ(デフォルトは2よ)");
+            let answer = input(">>> ");
+            if answer == "1" {
+                Some(ask_block("falseの場合のコード"))
+            } else {
+                None
+            }
+        })
     } else {
         println!("まじめに入力しなさいよね！");
-        ask_instruction()
+        ask_instruction(prompt)
     }
 }
 
-fn ask_block() -> Block {
+fn ask_program() -> Block {
     let mut block: Block = vec![];
     loop {
-        block.push(ask_instruction());
+        block.push(ask_instruction("プログラム"));
         println!("まだプログラミングを続けるわよね？");
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
@@ -61,8 +72,23 @@ fn ask_block() -> Block {
     block
 }
 
-fn ask_expr() -> Expr {
-    println!("式ぐらい自分で入力しなさいよね！");
+fn ask_block(prompt: &str) -> Block {
+    let mut block: Block = vec![];
+    loop {
+        block.push(ask_instruction(prompt));
+        println!("まだコードブロックを続けるわよね？");
+        println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
+        let answer = input(">>> ");
+        if answer == "2" {
+            println!("え、もうやめるの？わかったわ。お疲れ様");
+            break;
+        }
+    }
+    block
+}
+
+fn ask_expr(prompt: &str) -> Expr {
+    println!("{prompt}の式ぐらい自分で入力しなさいよね！");
     parse_expr(input(">>> "))
 }
 
@@ -90,6 +116,12 @@ fn parse_expr(source: String) -> Expr {
             expr.push(Expr::Operator(Operator::Div))
         } else if token == "%" {
             expr.push(Expr::Operator(Operator::Mod))
+        } else if token == "==" {
+            expr.push(Expr::Operator(Operator::Equal))
+        } else if token == ">" {
+            expr.push(Expr::Operator(Operator::Greater))
+        } else if token == "<" {
+            expr.push(Expr::Operator(Operator::Less))
         }
     }
     Expr::Expr(expr)
