@@ -15,7 +15,7 @@ fn main() {
         .expect("ごめん、ファイルを開くのミスっちゃった")
         .write_all(program.as_bytes())
         .expect("ごめん、ファイルの書き込みミスっちゃった");
-    println!("書き込んだわ、これで実行できるわね！\n...あんたとプログラミングするの、少しは楽しいのかもしれない♡")
+    println!("書き込んだわ、これで実行できるわね！\n...あんたとプログラミングするの、少しは楽しいのかもしれない")
 }
 
 /// Get standard input
@@ -28,7 +28,7 @@ fn input(prompt: &str) -> String {
 }
 
 fn ask_lang() -> Box<dyn Fn(Block) -> String> {
-    println!("これが最後の質問よ。\n何言語のプログラムを出力したいのよ？");
+    println!("何言語のプログラムを出力したいのよ？");
     println!("1: JavaScript\n2: Ruby\n3: Python");
     let answer = input(">>> ");
     if answer == "1" {
@@ -113,7 +113,7 @@ fn ask_instruction(prompt: &str) -> Instruction {
     } else if answer == "8" {
         Instruction::Return(Some(ask_expr("返す値")))
     } else {
-        println!("まじめに入力しなさいよね！");
+        println!("ちょっとぉ！しっかり入力しなさいよ！");
         ask_instruction(prompt)
     }
 }
@@ -127,7 +127,7 @@ fn ask_program() -> Block {
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
-            println!("わかったわ、お疲れ様♡\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
+            println!("わかったわ、お疲れ様\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
             break;
         }
     }
@@ -143,7 +143,7 @@ fn ask_block(prompt: &str) -> Block {
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
-            println!("わかったわ、お疲れ様♡\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
+            println!("わかったわ、お疲れ様\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
             break;
         }
     }
