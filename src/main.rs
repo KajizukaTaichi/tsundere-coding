@@ -8,7 +8,8 @@ use std::{
 };
 
 fn main() {
-    let program = ask_lang()(ask_program());
+    let program = ask_program();
+    let program = ask_lang()(program);
     println!("ほら、プログラムが出来たわよ！\nで、どのファイルに出力すれば良いのよ？");
     File::create(input(">>> "))
         .expect("ごめん、ファイルを開くのミスっちゃった")
