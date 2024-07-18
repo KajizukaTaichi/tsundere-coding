@@ -89,7 +89,7 @@ fn ask_program() -> Block {
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
-            println!("え、もうやめるの？わかったわ。お疲れ様。\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
+            println!("わかったわ。お疲れ様。\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
             break;
         }
     }
@@ -97,7 +97,7 @@ fn ask_program() -> Block {
 }
 
 fn ask_block(prompt: &str) -> Block {
-    println!("{prompt}のコードを書いていくわよ！");
+    println!("{prompt}を書いていくわよ！");
     let mut block: Block = vec![];
     loop {
         block.push(ask_instruction(prompt));
@@ -105,7 +105,7 @@ fn ask_block(prompt: &str) -> Block {
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
-            println!("え、もうやめるの？わかったわ、お疲れ様。\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
+            println!("わかったわ、お疲れ様。\nべっ、別にあんたなんかを労って言ってるわけじゃないんだからね！");
             break;
         }
     }
