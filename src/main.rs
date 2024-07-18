@@ -38,7 +38,7 @@ fn ask_lang() -> Box<dyn Fn(Block) -> String> {
     } else if answer == "3" {
         Box::new(transpile_python)
     } else {
-        println!("まじめに入力しなさいよね！");
+        println!("ちょっとぉ！しっかり入力しなさいよ！");
         ask_lang()
     }
 }
