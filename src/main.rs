@@ -10,7 +10,7 @@ use std::{
 fn main() {
     let program = ask_program();
     let program = ask_lang()(program);
-    println!("プログラムが出来たわよ！\nで、どのファイルに書き込めば良いのよ？");
+    println!("プログラムが出来たわよ！\n{program}\nで、どのファイルに書き込めば良いのよ？");
     File::create(input(">>> "))
         .expect("ごめん、ファイルを開くのミスっちゃった")
         .write_all(program.as_bytes())
@@ -139,7 +139,7 @@ fn ask_block(prompt: &str) -> Block {
     let mut block: Block = vec![];
     loop {
         block.push(ask_instruction(prompt));
-        println!("まだコードブロックを続けるわよね？");
+        println!("まだ{prompt}を続けるわよね？");
         println!("1: もちろん\n2: もうおしまい\n(デフォルトは1よ)");
         let answer = input(">>> ");
         if answer == "2" {
